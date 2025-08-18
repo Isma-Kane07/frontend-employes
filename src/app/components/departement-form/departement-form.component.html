@@ -1,0 +1,13 @@
+<h2>{{ isEditing ? 'Modifier un département' : 'Ajouter un nouveau département' }}</h2>
+<form (ngSubmit)="saveDepartement()">
+  <div>
+    <label for="nomDepartment">Nom du Département:</label>
+    <input id="nomDepartment" [(ngModel)]="departement.nomDepartment" name="nomDepartment" required>
+  </div>
+  <div>
+    <label for="taille">Taille:</label>
+    <input id="taille" [(ngModel)]="departement.taille" name="taille" type="number" required>
+  </div>
+  <button type="submit">{{ isEditing ? 'Sauvegarder' : 'Créer' }}</button>
+  <button type="button" (click)="cancel()">Annuler</button>
+</form>

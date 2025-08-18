@@ -1,0 +1,16 @@
+<div *ngIf="departement">
+  <h2>Détails du Département</h2>
+  <div>
+    <label>ID :</label> {{ departement.id }}
+  </div>
+  <div>
+    <label>Nom :</label> {{ departement.nomDepartment }}
+  </div>
+  <div>
+    <label>Taille :</label> {{ departement.taille }}
+  </div>
+  <button (click)="goBack()">Retour à la liste</button>
+</div>
+<div *ngIf="!departement">
+  <p>Chargement en cours ou département introuvable...</p>
+</div>

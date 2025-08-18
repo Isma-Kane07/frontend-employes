@@ -1,0 +1,38 @@
+<h2>Liste des Employés</h2>
+
+<button routerLink="/employes/create">Ajouter un employé</button>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Matricule</th>
+      <th>Téléphone</th>
+      <th>Département</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employe of employes">
+      <td>{{ employe.id }}</td>
+      <td>{{ employe.nom }}</td>
+      <td>{{ employe.prenom }}</td>
+      <td>{{ employe.noMatricule }}</td>
+      <td>{{ employe.tel }}</td>
+      <td>{{ getDepartementName(employe.departementId) }}</td>
+      <td>
+        <button [routerLink]="['/employes/detail', employe.id]">Voir</button>
+        <button [routerLink]="['/employes/update', employe.id]">Modifier</button>
+        <button (click)="deleteEmploye(employe.id)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0">Précédent</button>
+  <span> Page {{ currentPage + 1 }} sur {{ totalPages }} </span>
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1">Suivant</button>
+</div>

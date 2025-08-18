@@ -1,0 +1,25 @@
+<div *ngIf="employe">
+  <h2>Détails de l'employé</h2>
+  <div>
+    <label>ID :</label> {{ employe.id }}
+  </div>
+  <div>
+    <label>Nom :</label> {{ employe.nom }}
+  </div>
+  <div>
+    <label>Prénom :</label> {{ employe.prenom }}
+  </div>
+  <div>
+    <label>N° Matricule :</label> {{ employe.noMatricule }}
+  </div>
+  <div>
+    <label>Téléphone :</label> {{ employe.tel }}
+  </div>
+  <div>
+    <label>Département :</label> {{ departementNom }}
+  </div>
+  <button (click)="goBack()">Retour à la liste</button>
+</div>
+<div *ngIf="!employe">
+  <p>Chargement en cours ou employé introuvable...</p>
+</div>

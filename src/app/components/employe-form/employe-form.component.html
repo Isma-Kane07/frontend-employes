@@ -1,0 +1,29 @@
+<h2 [style.color]="isEditing ? 'blue' : 'green'">{{ isEditing ? 'Modifier un employé' : 'Ajouter un nouvel employé' }}</h2>
+
+<p *ngIf="message" class="message">{{ message }}</p>
+<form (ngSubmit)="saveEmploye()">
+  <div>
+    <label for="nom">Nom:</label>
+    <input id="nom" [(ngModel)]="employe.nom" name="nom" required>
+  </div>
+  <div>
+    <label for="prenom">Prénom:</label>
+    <input id="prenom" [(ngModel)]="employe.prenom" name="prenom" required>
+  </div>
+  <div>
+    <label for="noMatricule">N° Matricule:</label>
+    <input id="noMatricule" [(ngModel)]="employe.noMatricule" name="noMatricule" required>
+  </div>
+  <div>
+    <label for="tel">Téléphone:</label>
+    <input id="tel" [(ngModel)]="employe.tel" name="tel" required>
+  </div>
+  <div>
+    <label for="departement">Département:</label>
+    <select id="departement" [(ngModel)]="employe.departementId" name="departement">
+      <option *ngFor="let dep of departements" [ngValue]="dep.id">{{ dep.nomDepartment }}</option>
+    </select>
+  </div>
+  <button type="submit">{{ isEditing ? 'Sauvegarder' : 'Créer' }}</button>
+  <button type="button" (click)="cancel()">Annuler</button>
+</form>
