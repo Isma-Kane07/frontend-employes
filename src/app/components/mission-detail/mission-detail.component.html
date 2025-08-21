@@ -1,0 +1,27 @@
+<div *ngIf="mission">
+  <h2>Détails de la mission</h2>
+  <div>
+    <label>ID :</label> {{ mission.id }}
+  </div>
+  <div>
+    <label>Lieu :</label> {{ mission.lieu }}
+  </div>
+  <div>
+    <label>Description :</label> {{ mission.description }}
+  </div>
+  <div>
+    <label>Date de début :</label> {{ mission.dateDebut | date:'shortDate' }}
+  </div>
+  <div>
+    <label>Date de fin :</label> {{ mission.dateFin | date:'shortDate' }}
+  </div>
+  <div>
+    <label>Employé assigné :</label>
+    <span *ngIf="employe">{{ employe.nom }} {{ employe.prenom }}</span>
+    <span *ngIf="!employe">Chargement...</span>
+  </div>
+  <button (click)="goBack()">Retour à la liste</button>
+</div>
+<div *ngIf="!mission">
+  <p>Chargement en cours ou mission introuvable...</p>
+</div>

@@ -1,0 +1,38 @@
+<h2>Liste des Missions</h2>
+
+<button routerLink="/missions/create">Ajouter une mission</button>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Lieu</th>
+      <th>Description</th>
+      <th>Date de début</th>
+      <th>Date de fin</th>
+      <th>Employé</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let mission of missions">
+      <td>{{ mission.id }}</td>
+      <td>{{ mission.lieu }}</td>
+      <td>{{ mission.description }}</td>
+      <td>{{ mission.dateDebut }}</td>
+      <td>{{ mission.dateFin }}</td>
+      <td>{{ getEmployeName(mission.employeId) }}</td>
+      <td>
+        <button [routerLink]="['/missions/detail', mission.id]">Voir</button>
+        <button [routerLink]="['/missions/update', mission.id]">Modifier</button>
+        <button (click)="deleteMission(mission.id)">Supprimer</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div>
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0">Précédent</button>
+  <span> Page {{ currentPage + 1 }} sur {{ totalPages }} </span>
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1">Suivant</button>
+</div>

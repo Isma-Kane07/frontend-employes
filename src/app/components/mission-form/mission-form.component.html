@@ -1,0 +1,32 @@
+<h2 [style.color]="isEditing ? 'blue' : 'green'">
+  {{ isEditing ? 'Modifier une mission' : 'Ajouter une nouvelle mission' }}
+</h2>
+
+<p *ngIf="message" class="message">{{ message }}</p>
+
+<form (ngSubmit)="saveMission()">
+  <div>
+    <label for="lieu">Lieu:</label>
+    <input id="lieu" [(ngModel)]="mission.lieu" name="lieu" required>
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <input id="description" [(ngModel)]="mission.description" name="description" required>
+  </div>
+  <div>
+    <label for="dateDebut">Date de début:</label>
+    <input type="date" id="dateDebut" [(ngModel)]="mission.dateDebut" name="dateDebut" required>
+  </div>
+  <div>
+    <label for="dateFin">Date de fin:</label>
+    <input type="date" id="dateFin" [(ngModel)]="mission.dateFin" name="dateFin" required>
+  </div>
+  <div>
+    <label for="employe">Employé:</label>
+    <select id="employe" [(ngModel)]="mission.employeId" name="employe" required>
+      <option *ngFor="let emp of employes" [ngValue]="emp.id">{{ emp.nom }} {{ emp.prenom }}</option>
+    </select>
+  </div>
+  <button type="submit">{{ isEditing ? 'Sauvegarder' : 'Créer' }}</button>
+  <button type="button" (click)="cancel()">Annuler</button>
+</form>
