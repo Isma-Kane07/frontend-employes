@@ -1,32 +1,64 @@
-<h2 [style.color]="isEditing ? 'blue' : 'green'">
-  {{ isEditing ? 'Modifier une mission' : 'Ajouter une nouvelle mission' }}
-</h2>
+<section class="container px-4 mx-auto">
+    <div class="flex items-center gap-x-3">
+        <h2 class="text-lg font-medium text-gray-800 dark:text-white">
+            {{ isEditing ? 'Modifier une mission' : 'Ajouter une nouvelle mission' }}
+        </h2>
+    </div>
 
-<p *ngIf="message" class="message">{{ message }}</p>
+    <div *ngIf="message" class="mt-4 px-4 py-2 text-sm text-center text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
+        {{ message }}
+    </div>
 
-<form (ngSubmit)="saveMission()">
-  <div>
-    <label for="lieu">Lieu:</label>
-    <input id="lieu" [(ngModel)]="mission.lieu" name="lieu" required>
-  </div>
-  <div>
-    <label for="description">Description:</label>
-    <input id="description" [(ngModel)]="mission.description" name="description" required>
-  </div>
-  <div>
-    <label for="dateDebut">Date de début:</label>
-    <input type="date" id="dateDebut" [(ngModel)]="mission.dateDebut" name="dateDebut" required>
-  </div>
-  <div>
-    <label for="dateFin">Date de fin:</label>
-    <input type="date" id="dateFin" [(ngModel)]="mission.dateFin" name="dateFin" required>
-  </div>
-  <div>
-    <label for="employe">Employé:</label>
-    <select id="employe" [(ngModel)]="mission.employeId" name="employe" required>
-      <option *ngFor="let emp of employes" [ngValue]="emp.id">{{ emp.nom }} {{ emp.prenom }}</option>
-    </select>
-  </div>
-  <button type="submit">{{ isEditing ? 'Sauvegarder' : 'Créer' }}</button>
-  <button type="button" (click)="cancel()">Annuler</button>
-</form>
+    <div class="mt-6">
+        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+            <div class="p-6 bg-white dark:bg-gray-800">
+                <form (ngSubmit)="saveMission()">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="lieu">Lieu</label>
+                            <input id="lieu" type="text" [(ngModel)]="mission.lieu" name="lieu" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="description">Description</label>
+                            <input id="description" type="text" [(ngModel)]="mission.description" name="description" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+                        
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="dateDebut">Date de début</label>
+                            <input id="dateDebut" type="date" [(ngModel)]="mission.dateDebut" name="dateDebut" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="dateFin">Date de fin</label>
+                            <input id="dateFin" type="date" [(ngModel)]="mission.dateFin" name="dateFin" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div class="col-span-1 sm:col-span-2">
+                            <label class="text-gray-700 dark:text-gray-200" for="employe">Employé</label>
+                            <select id="employe" [(ngModel)]="mission.employeId" name="employe" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                                <option *ngFor="let emp of employes" [ngValue]="emp.id">{{ emp.nom }} {{ emp.prenom }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6 space-x-4">
+                        <button type="button" (click)="cancel()"
+                            class="px-8 py-2.5 leading-5 text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-gray-200">
+                            Annuler
+                        </button>
+                        <button type="submit"
+                            class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                            {{ isEditing ? 'Sauvegarder' : 'Créer' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

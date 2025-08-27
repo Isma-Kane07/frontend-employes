@@ -1,16 +1,42 @@
-<div *ngIf="departement">
-  <h2>Détails du Département</h2>
-  <div>
-    <label>ID :</label> {{ departement.id }}
-  </div>
-  <div>
-    <label>Nom :</label> {{ departement.nomDepartment }}
-  </div>
-  <div>
-    <label>Taille :</label> {{ departement.taille }}
-  </div>
-  <button (click)="goBack()">Retour à la liste</button>
-</div>
-<div *ngIf="!departement">
-  <p>Chargement en cours ou département introuvable...</p>
-</div>
+<section class="container px-4 mx-auto">
+    <div class="sm:flex sm:items-center sm:justify-between">
+        <h2 class="text-lg font-medium text-gray-800 dark:text-white">Détails du Département</h2>
+
+        <div class="flex items-center mt-4 gap-x-3 sm:mt-0">
+            <button (click)="goBack()"
+                class="flex items-center px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
+                </svg>
+                <span>Retour à la liste</span>
+            </button>
+        </div>
+    </div>
+    
+    <div *ngIf="departement" class="mt-6 overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+        <div class="p-6 bg-white dark:bg-gray-800">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="flex flex-col">
+                    <span class="text-gray-700 dark:text-gray-200 font-medium">ID</span>
+                    <span class="mt-1 text-gray-500 dark:text-gray-300">{{ departement.id }}</span>
+                </div>
+
+                <div class="flex flex-col">
+                    <span class="text-gray-700 dark:text-gray-200 font-medium">Nom</span>
+                    <span class="mt-1 text-gray-500 dark:text-gray-300">{{ departement.nomDepartment }}</span>
+                </div>
+
+                <div class="flex flex-col">
+                    <span class="text-gray-700 dark:text-gray-200 font-medium">Taille</span>
+                    <span class="mt-1 text-gray-500 dark:text-gray-300">{{ departement.taille }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!departement" class="mt-6">
+        <div class="p-6 text-center text-gray-500 dark:text-gray-400 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+            <p>Chargement en cours ou département introuvable...</p>
+        </div>
+    </div>
+</section>

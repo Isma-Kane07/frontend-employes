@@ -1,13 +1,40 @@
-<h2>{{ isEditing ? 'Modifier un département' : 'Ajouter un nouveau département' }}</h2>
-<form (ngSubmit)="saveDepartement()">
-  <div>
-    <label for="nomDepartment">Nom du Département:</label>
-    <input id="nomDepartment" [(ngModel)]="departement.nomDepartment" name="nomDepartment" required>
-  </div>
-  <div>
-    <label for="taille">Taille:</label>
-    <input id="taille" [(ngModel)]="departement.taille" name="taille" type="number" required>
-  </div>
-  <button type="submit">{{ isEditing ? 'Sauvegarder' : 'Créer' }}</button>
-  <button type="button" (click)="cancel()">Annuler</button>
-</form>
+<section class="container px-4 mx-auto">
+    <div class="flex items-center gap-x-3">
+        <h2 class="text-lg font-medium text-gray-800 dark:text-white">
+            {{ isEditing ? 'Modifier un département' : 'Ajouter un nouveau département' }}
+        </h2>
+    </div>
+
+    <div class="mt-6">
+        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
+            <div class="p-6 bg-white dark:bg-gray-800">
+                <form (ngSubmit)="saveDepartement()">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="nomDepartment">Nom du Département</label>
+                            <input id="nomDepartment" type="text" [(ngModel)]="departement.nomDepartment" name="nomDepartment" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-700 dark:text-gray-200" for="taille">Taille</label>
+                            <input id="taille" type="number" [(ngModel)]="departement.taille" name="taille" required
+                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6 space-x-4">
+                        <button type="button" (click)="cancel()"
+                            class="px-8 py-2.5 leading-5 text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-gray-200">
+                            Annuler
+                        </button>
+                        <button type="submit"
+                            class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+                            {{ isEditing ? 'Sauvegarder' : 'Créer' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
