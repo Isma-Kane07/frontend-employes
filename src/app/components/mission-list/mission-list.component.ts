@@ -1,9 +1,8 @@
-// src/app/components/mission-list/mission-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { MissionService } from '../../services/mission.service';
 import { EmployeService } from '../../services/employe.service'; // Importez le service des employés
 import { Mission } from '../../models/mission.model';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs'; // Importez forkJoin pour combiner les requêtes
@@ -11,16 +10,14 @@ import { forkJoin } from 'rxjs'; // Importez forkJoin pour combiner les requête
 @Component({
   selector: 'app-mission-list',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterLink],
+  imports: [CommonModule, HttpClientModule, RouterLink, DatePipe], 
   templateUrl: './mission-list.component.html',
   styleUrls: ['./mission-list.component.css']
 })
 export class MissionListComponent implements OnInit {
   missions: Mission[] = [];
-  employeId: number | null = null;
   employesMap: Map<number, string> = new Map(); // Map pour stocker les noms des employés
-  
-  // Pagination
+
   currentPage = 0;
   pageSize = 5;
   totalPages = 0;
@@ -38,7 +35,7 @@ export class MissionListComponent implements OnInit {
     // Utiliser forkJoin pour charger les missions et les employés en parallèle
     forkJoin({
       missionsPage: this.missionService.getMissionsPaginated(this.currentPage, this.pageSize),
-      employesList: this.employeService.getAllEmployes()
+      employesList: this.employeService.getAllEmployes() // Charge tous les employés
     }).subscribe({
       next: ({ missionsPage, employesList }) => {
         this.missions = missionsPage.content;
@@ -55,7 +52,7 @@ export class MissionListComponent implements OnInit {
     });
   }
 
-  // Nouvelle méthode pour obtenir le nom complet de l'employé
+  // Nouvelle méthode pour obtenir le nom complet de l'employé à partir de la map
   getEmployeName(employeId: number | undefined): string {
     if (employeId === undefined) {
       return 'Non assigné';
@@ -75,7 +72,6 @@ export class MissionListComponent implements OnInit {
     }
   }
 
-  // Méthodes de navigation pour la pagination
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
       this.currentPage = page;

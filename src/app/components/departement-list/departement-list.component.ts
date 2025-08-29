@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { DepartementService } from '../../services/departement.service';
 import { Departement } from '../../models/departement.model';
 import { Page } from '../../models/page.model';
-import { forkJoin, map } from 'rxjs'; // Importez map et forkJoin
+import { forkJoin, map, Observable } from 'rxjs'; // Importez map, forkJoin et Observable
 
 @Component({
   selector: 'app-departement-list',
@@ -33,34 +33,41 @@ export class DepartementListComponent implements OnInit {
         this.totalPages = data.totalPages;
         
         // Créer un tableau d'observables pour chaque appel de taille actuelle
-        const tailleObservables = this.departements.map(dep => 
+        const tailleObservables: Observable<{ id: number | undefined, taille: number }>[] = this.departements.map(dep => 
           this.departementService.getTailleActuelle(dep.id!).pipe(
             map(taille => ({ id: dep.id, taille: taille }))
           )
         );
 
         // Utiliser forkJoin pour lancer tous les appels en parallèle
-        forkJoin(tailleObservables).subscribe({
-          next: (tailles) => {
-            this.tailleActuelleMap.clear();
-            tailles.forEach(item => {
-              if (item.id) {
-                this.tailleActuelleMap.set(item.id, item.taille);
-              }
-            });
-          },
-          error: (e) => console.error(e)
-        });
+        if (tailleObservables.length > 0) { // Ne pas appeler forkJoin sur un tableau vide
+          forkJoin(tailleObservables).subscribe({
+            next: (tailles) => {
+              this.tailleActuelleMap.clear();
+              tailles.forEach(item => {
+                if (item.id) {
+                  this.tailleActuelleMap.set(item.id, item.taille);
+                }
+              });
+            },
+            error: (e) => console.error('Erreur lors du chargement des tailles actuelles:', e)
+          });
+        } else {
+          this.tailleActuelleMap.clear(); // Si aucun département, vide la map
+        }
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error('Erreur lors du chargement des départements paginés:', e)
     });
   }
 
   deleteDepartement(id: number | undefined): void {
     if (id !== undefined) {
       this.departementService.deleteDepartement(id).subscribe({
-        next: () => this.loadDepartements(),
-        error: (e) => console.error(e)
+        next: () => {
+          console.log('Département supprimé avec succès!');
+          this.loadDepartements();
+        },
+        error: (e) => console.error('Erreur lors de la suppression du département:', e)
       });
     }
   }

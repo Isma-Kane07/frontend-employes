@@ -3,9 +3,9 @@ import { EmployeService } from '../../services/employe.service';
 import { Employe } from '../../models/employe.model';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { DepartementService } from '../../services/departement.service';
-import { forkJoin } from 'rxjs';
+import { DepartementService } from '../../services/departement.service'; // Réintroduit DepartementService
 import { RouterLink } from '@angular/router';
+import { forkJoin } from 'rxjs'; // Importe forkJoin
 
 @Component({
   selector: 'app-employe-list',
@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
 })
 export class EmployeListComponent implements OnInit {
   employes: Employe[] = [];
-  departementsMap: Map<number, string> = new Map();
+  departementsMap: Map<number, string> = new Map(); // Réintroduit la map pour les noms des départements
 
   currentPage = 0;
   pageSize = 5;
@@ -24,7 +24,7 @@ export class EmployeListComponent implements OnInit {
 
   constructor(
     private employeService: EmployeService,
-    private departementService: DepartementService
+    private departementService: DepartementService // Réinjecte DepartementService
   ) { }
 
   ngOnInit(): void {
@@ -32,19 +32,27 @@ export class EmployeListComponent implements OnInit {
   }
 
   loadData(): void {
+    // Utilise forkJoin pour charger les employés paginés et tous les départements en parallèle
     forkJoin({
       employesPage: this.employeService.getEmployesPaginated(this.currentPage, this.pageSize),
-      departementsMap: this.departementService.getDepartementsMap()
+      departementsList: this.departementService.getAllDepartements() // Charge tous les départements
     }).subscribe({
-      next: ({ employesPage, departementsMap }) => {
+      next: ({ employesPage, departementsList }) => {
         this.employes = employesPage.content;
         this.totalPages = employesPage.totalPages;
-        this.departementsMap = departementsMap;
+
+        // Construit la map des départements pour un accès rapide
+        departementsList.forEach(dep => {
+          if (dep.id && dep.nomDepartment) {
+            this.departementsMap.set(dep.id, dep.nomDepartment);
+          }
+        });
       },
-      error: (e) => console.error(e)
+      error: (e) => console.error('Erreur lors du chargement des données des employés ou départements:', e)
     });
   }
 
+  // Nouvelle méthode pour obtenir le nom complet du département à partir de la map
   getDepartementName(departementId: number | undefined): string {
     if (departementId === undefined) {
       return 'Non assigné';
@@ -59,12 +67,11 @@ export class EmployeListComponent implements OnInit {
           console.log('Employé supprimé avec succès!');
           this.loadData();
         },
-        error: (e) => console.error(e)
+        error: (e) => console.error('Erreur lors de la suppression de l\'employé:', e)
       });
     }
   }
 
-  // Méthodes de navigation pour la pagination
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
       this.currentPage = page;

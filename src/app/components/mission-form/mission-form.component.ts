@@ -1,5 +1,3 @@
-// src/app/components/mission-form/mission-form.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,9 +16,9 @@ import { Employe } from '../../models/employe.model';
   styleUrl: './mission-form.component.css'
 })
 export class MissionFormComponent implements OnInit {
-  // Initialisation des dates avec des chaînes de caractères vides
+  // Initialisation avec employeId car c'est ce que le DTO backend attend pour la liaison
   mission: Mission = { lieu: '', description: '', dateDebut: '', dateFin: '', employeId: 0 };
-  employes: Employe[] = [];
+  employes: Employe[] = []; // Liste des employés pour le sélecteur
   isEditing = false;
   message = '';
 
@@ -37,7 +35,15 @@ export class MissionFormComponent implements OnInit {
     if (id) {
       this.isEditing = true;
       this.missionService.getMissionById(+id).subscribe({
-        next: (data) => this.mission = data,
+        next: (data) => {
+          this.mission = data;
+          // Assurez-vous que l'employeId est bien défini pour le formulaire
+          // Si le backend renvoie un objet 'employe' complet, il faut extraire son ID
+          if (this.mission.employe && this.mission.employe.id) {
+            this.mission.employeId = this.mission.employe.id;
+          }
+          // Si employe est null/undefined, employeId doit rester tel quel (peut être 0 ou null)
+        },
         error: (e) => console.error(e)
       });
     }
@@ -53,10 +59,20 @@ export class MissionFormComponent implements OnInit {
   saveMission(): void {
     this.message = '';
 
+    // Crée une copie de l'objet mission pour éviter de modifier l'original
+    // et s'assurer que seuls les champs attendus par le DTO sont envoyés.
+    const missionToSave: any = {
+      id: this.mission.id,
+      lieu: this.mission.lieu,
+      description: this.mission.description,
+      dateDebut: this.mission.dateDebut,
+      dateFin: this.mission.dateFin,
+      employeId: this.mission.employeId
+    };
+
     if (this.isEditing) {
-      if (this.mission.id !== undefined) {
-        // Passe l'objet mission directement au service
-        this.missionService.updateMission(this.mission.id, this.mission).subscribe({
+      if (missionToSave.id !== undefined) {
+        this.missionService.updateMission(missionToSave.id, missionToSave as Mission).subscribe({
           next: () => {
             this.message = 'Mise à jour réussie !';
             this.router.navigate(['/missions']);
@@ -68,8 +84,7 @@ export class MissionFormComponent implements OnInit {
         });
       }
     } else {
-      // Passe l'objet mission directement au service
-      this.missionService.createMission(this.mission).subscribe({
+      this.missionService.createMission(missionToSave as Mission).subscribe({
         next: () => {
           this.message = 'Création réussie !';
           this.router.navigate(['/missions']);

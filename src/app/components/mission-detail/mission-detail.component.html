@@ -43,8 +43,10 @@
 
                 <div class="flex flex-col">
                     <span class="text-gray-700 dark:text-gray-200 font-medium">Employé assigné</span>
+                    <!-- Affiche les détails de l'employé à partir de la propriété 'employe' du composant -->
                     <span *ngIf="employe" class="mt-1 px-3 py-1 w-max text-xs text-indigo-500 rounded-full dark:bg-gray-800 bg-indigo-100/60">{{ employe.nom }} {{ employe.prenom }}</span>
-                    <span *ngIf="!employe" class="mt-1 text-gray-500 dark:text-gray-300">Chargement...</span>
+                    <span *ngIf="!employe && mission.employeId" class="mt-1 text-gray-500 dark:text-gray-300">Chargement...</span>
+                    <span *ngIf="!employe && !mission.employeId" class="mt-1 text-gray-500 dark:text-gray-300">Non assigné</span>
                 </div>
             </div>
         </div>
